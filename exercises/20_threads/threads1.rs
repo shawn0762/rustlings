@@ -15,6 +15,7 @@ fn main() {
             let start = Instant::now();
             thread::sleep(Duration::from_millis(250));
             println!("Thread {i} done");
+            // 返回从start定义开始到目前所经过的毫秒数
             start.elapsed().as_millis()
         });
         handles.push(handle);
@@ -24,6 +25,11 @@ fn main() {
     for handle in handles {
         // TODO: Collect the results of all threads into the `results` vector.
         // Use the `JoinHandle` struct which is returned by `thread::spawn`.
+        results.push(handle.join().unwrap());
+        // match handle.join() {
+        //     Ok(ts) => results.push(ts),
+        //     Err(_) => {}
+        // }
     }
 
     if results.len() != 10 {

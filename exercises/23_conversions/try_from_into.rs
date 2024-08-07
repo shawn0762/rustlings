@@ -28,14 +28,36 @@ enum IntoColorError {
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = IntoColorError;
 
-    fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {}
+    fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        let (red, green, blue) = tuple;
+        // let range = 0..=255;
+
+        // if !range.contains(&r) || !range.contains(&g) || !range.contains(&b) {
+        //     return Err(IntoColorError::BadLen);
+        // }
+        let op = move |e| IntoColorError::IntConversion;
+        let red = red.try_into().map_err(op)?;
+        let green = green.try_into().map_err(op)?;
+        let blue = blue.try_into().map_err(op)?;
+
+        Ok(Self { red, green, blue })
+    }
 }
 
 // TODO: Array implementation.
 impl TryFrom<[i16; 3]> for Color {
     type Error = IntoColorError;
 
-    fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {}
+    fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        Self::try_from((arr[0], arr[1], arr[2]))
+
+        // let op = move |e| IntoColorError::IntConversion;
+        // let red = arr[0].try_into().map_err(op)?;
+        // let green = arr[1].try_into().map_err(op)?;
+        // let blue = arr[2].try_into().map_err(op)?;
+
+        // Ok(Self { red, green, blue })
+    }
 }
 
 // TODO: Slice implementation.
@@ -43,7 +65,19 @@ impl TryFrom<[i16; 3]> for Color {
 impl TryFrom<&[i16]> for Color {
     type Error = IntoColorError;
 
-    fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {}
+    fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        if slice.len() != 3 {
+            return Err(IntoColorError::BadLen);
+        }
+
+        Self::try_from((slice[0], slice[1], slice[2]))
+        // let op = move |e| IntoColorError::IntConversion;
+        // let red = slice[0].try_into().map_err(op)?;
+        // let green = slice[1].try_into().map_err(op)?;
+        // let blue = slice[2].try_into().map_err(op)?;
+
+        // Ok(Self { red, green, blue })
+    }
 }
 
 fn main() {

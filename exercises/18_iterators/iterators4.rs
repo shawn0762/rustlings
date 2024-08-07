@@ -10,10 +10,24 @@ fn factorial(num: u64) -> u64 {
     // - additional variables
     // For an extra challenge, don't use:
     // - recursion
+    // let n = (1..num).take(5);
+
+    // (2..=num).reduce(|f, n| f * n).unwrap_or(1)
+    // (2..=num).fold(1, |acc, n| acc * n)
+    (2..=num).product()
 }
 
 fn main() {
     // You can optionally experiment here.
+    // let n = (1..4 + 1).reduce(|f, n| f * n).unwrap_or(1);
+    // println!("{:?}", n);
+
+    // let a = 1..=6;
+
+    // (1..4).for_each(|n| println!("{:?}", n));
+    // (1..=4).for_each(|n| println!("{:?}", n));
+
+    // println!("{:?}", (2..=1).product::<u64>())
 }
 
 #[cfg(test)]

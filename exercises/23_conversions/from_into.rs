@@ -34,7 +34,30 @@ impl Default for Person {
 // 5. Parse the second element from the split operation into a `u8` as the age.
 // 6. If parsing the age fails, return the default of `Person`.
 impl From<&str> for Person {
-    fn from(s: &str) -> Self {}
+    fn from(s: &str) -> Self {
+        let mut split = s.split(',');
+        let (Some(name), Some(age), None) = (split.next(), split.next(), split.next()) else {
+            return Self::default();
+        };
+
+        if name.is_empty() {
+            return Self::default();
+        }
+
+        let Ok(age) = age.parse() else {
+            return Self::default();
+        };
+
+        let a = <String as From<&str>>::from(name);
+
+        Person {
+            // rust默认为所有类型实现了 Into<U>，只要U实现了From<T>
+            // 也就是说rust默认为&str实现了 Into<U>，其into方法调用 U::from(&str) 返回一个U
+            // 所以如果想要得到一个String，只要为String实现From<&str>即可
+            name: name.into(),
+            age,
+        }
+    }
 }
 
 fn main() {

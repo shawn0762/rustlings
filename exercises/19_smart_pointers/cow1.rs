@@ -26,10 +26,17 @@ mod tests {
     #[test]
     fn reference_mutation() {
         // Clone occurs because `input` needs to be mutated.
+        // abs_all会将-1转换成1，在写入1时发生复制
         let vec = vec![-1, 0, 1];
+        // 初始状态：input是一个Cow枚举值，因为此时没有任何写入操作，input还只是对上面vec的引用
+        // 具体值为Cow::Borrowed(&[i32]) ①
         let mut input = Cow::from(&vec);
+        // 这里发生将会发生写入操作——将-1改为1，在写入前将 ① 中的&[i32]所指向的数据
+        // 复制一份，此时input变成Cow::Owned([i32])，表示input拥有复制出来的[i32]的所有权
+        // 然后将-1改为1
         abs_all(&mut input);
         assert!(matches!(input, Cow::Owned(_)));
+        // assert!(matches!(input, Cow::Borrowed(_)));
     }
 
     #[test]
@@ -39,7 +46,7 @@ mod tests {
         let mut input = Cow::from(&vec);
         abs_all(&mut input);
         // TODO: Replace `todo!()` with `Cow::Owned(_)` or `Cow::Borrowed(_)`.
-        assert!(matches!(input, todo!()));
+        assert!(matches!(input, Cow::Borrowed(_)));
     }
 
     #[test]
@@ -52,7 +59,7 @@ mod tests {
         let mut input = Cow::from(vec);
         abs_all(&mut input);
         // TODO: Replace `todo!()` with `Cow::Owned(_)` or `Cow::Borrowed(_)`.
-        assert!(matches!(input, todo!()));
+        assert!(matches!(input, Cow::Owned(_)));
     }
 
     #[test]
@@ -64,6 +71,6 @@ mod tests {
         let mut input = Cow::from(vec);
         abs_all(&mut input);
         // TODO: Replace `todo!()` with `Cow::Owned(_)` or `Cow::Borrowed(_)`.
-        assert!(matches!(input, todo!()));
+        assert!(matches!(input, Cow::Owned(_)));
     }
 }

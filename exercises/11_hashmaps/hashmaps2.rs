@@ -32,6 +32,12 @@ fn fruit_basket(basket: &mut HashMap<Fruit, u32>) {
         // TODO: Insert new fruits if they are not already present in the
         // basket. Note that you are not allowed to put any type of fruit that's
         // already present!
+        if basket.contains_key(&fruit) {
+            continue;
+        }
+        // insert会返回一个Option，如果此前key不存在，则将kv写入，并返回None
+        // 如果key已存在，则更新key，返回旧v
+        basket.insert(fruit, 5);
     }
 }
 

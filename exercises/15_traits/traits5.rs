@@ -19,9 +19,24 @@ impl SomeTrait for OtherStruct {}
 impl OtherTrait for OtherStruct {}
 
 // TODO: Fix the compiler error by only changing the signature of this function.
-fn some_func(item: ???) -> bool {
+// impl Trait 适用于比较简单的情况
+// 如果参数是引用类型：item: &(impl SomeTrait + OtherTrait)
+fn some_func(item: impl SomeTrait + OtherTrait) -> bool {
     item.some_function() && item.other_function()
 }
+
+// 也可以使用泛型trait bound
+// fn some_func<T: SomeTrait + OtherTrait>(item: T) -> bool {
+//     item.some_function() && item.other_function()
+// }
+
+// 通过where简化trait bound
+// fn some_func<T>(item: T) -> bool
+// where
+//     T: SomeTrait + OtherTrait,
+// {
+//     item.some_function() && item.other_function()
+// }
 
 fn main() {
     // You can optionally experiment here.
